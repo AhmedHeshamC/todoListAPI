@@ -3,6 +3,7 @@ const app = require('../server');
 const { refreshTokens } = require('../controllers/auth.controller');
 
 let token, refreshToken, todoId;
+const API_PREFIX = '/api/v1'; // Define API prefix for tests
 
 describe('Auth API', () => {
   const user = {
@@ -17,7 +18,7 @@ describe('Auth API', () => {
 
   test('Register user', async () => {
     const res = await request(app)
-      .post('/register')
+      .post(`${API_PREFIX}/register`) // Add prefix
       .send(user);
     expect(res.statusCode).toBe(201);
     expect(res.body.token).toBeDefined();
@@ -28,7 +29,7 @@ describe('Auth API', () => {
 
   test('Login user', async () => {
     const res = await request(app)
-      .post('/login')
+      .post(`${API_PREFIX}/login`) // Add prefix
       .send({ email: user.email, password: user.password });
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
@@ -37,7 +38,7 @@ describe('Auth API', () => {
 
   test('Refresh token', async () => {
     const res = await request(app)
-      .post('/refresh-token')
+      .post(`${API_PREFIX}/refresh-token`) // Add prefix
       .send({ refreshToken });
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
@@ -45,7 +46,7 @@ describe('Auth API', () => {
 
   test('Logout', async () => {
     const res = await request(app)
-      .post('/logout')
+      .post(`${API_PREFIX}/logout`) // Add prefix
       .send({ refreshToken });
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe('Logged out successfully');
@@ -61,20 +62,20 @@ describe('Todo API', () => {
 
   beforeAll(async () => {
     // Register and login to get token
-    await request(app).post('/register').send({
+    await request(app).post(`${API_PREFIX}/register`).send({ // Add prefix
       name: 'Todo User',
       email: 'todouser@example.com',
       password: 'password123'
     });
     const res = await request(app)
-      .post('/login')
+      .post(`${API_PREFIX}/login`) // Add prefix
       .send({ email: 'todouser@example.com', password: 'password123' });
     authToken = res.body.token;
   });
 
   test('Create todo', async () => {
     const res = await request(app)
-      .post('/todos')
+      .post(`${API_PREFIX}/todos`) // Add prefix
       .set('Authorization', `Bearer ${authToken}`)
       .send(todo);
     expect(res.statusCode).toBe(201);
@@ -84,7 +85,7 @@ describe('Todo API', () => {
 
   test('Get todos', async () => {
     const res = await request(app)
-      .get('/todos')
+      .get(`${API_PREFIX}/todos`) // Add prefix
       .set('Authorization', `Bearer ${authToken}`);
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body.data)).toBe(true);
@@ -92,7 +93,7 @@ describe('Todo API', () => {
 
   test('Update todo', async () => {
     const res = await request(app)
-      .put(`/todos/${todoId}`)
+      .put(`${API_PREFIX}/todos/${todoId}`) // Add prefix
       .set('Authorization', `Bearer ${authToken}`)
       .send({ title: 'Updated Todo', description: 'Updated Desc' });
     expect(res.statusCode).toBe(200);
@@ -101,7 +102,7 @@ describe('Todo API', () => {
 
   test('Delete todo', async () => {
     const res = await request(app)
-      .delete(`/todos/${todoId}`)
+      .delete(`${API_PREFIX}/todos/${todoId}`) // Add prefix
       .set('Authorization', `Bearer ${authToken}`);
     expect(res.statusCode).toBe(204);
   });

@@ -11,6 +11,7 @@ const todoRoutes = require('./routes/todo.routes');
 const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
+const API_VERSION = '/api/v1'; // Define API version prefix
 
 // Middleware
 app.use(helmet());
@@ -23,7 +24,7 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later'
 });
-app.use(limiter);
+app.use(API_VERSION, limiter); // Apply general limiter to versioned routes
 
 // Add stricter rate limiting for auth endpoints
 const authLimiter = rateLimit({
@@ -32,13 +33,13 @@ const authLimiter = rateLimit({
   message: 'Too many authentication attempts, please try again later'
 });
 
-// Apply to /register and /login only
-app.use('/register', authLimiter);
-app.use('/login', authLimiter);
+// Apply auth limiter to versioned /register and /login only
+app.use(`${API_VERSION}/register`, authLimiter);
+app.use(`${API_VERSION}/login`, authLimiter);
 
-// Routes
-app.use('/', authRoutes);
-app.use('/todos', todoRoutes);
+// Routes - Mount under API_VERSION
+app.use(API_VERSION, authRoutes);
+app.use(`${API_VERSION}/todos`, todoRoutes);
 
 // Error handling middleware
 app.use(errorMiddleware);

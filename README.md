@@ -67,12 +67,14 @@ A RESTful API for managing todo lists with user authentication.
 
 ## API Documentation
 
+All endpoints are prefixed with `/api/v1`.
+
 ### Authentication Endpoints
 
 #### Register User
 
 ```
-POST /register
+POST /api/v1/register
 
 Request:
 {
@@ -91,7 +93,7 @@ Response:
 #### Login User
 
 ```
-POST /login
+POST /api/v1/login
 
 Request:
 {
@@ -109,7 +111,7 @@ Response:
 #### Refresh Token
 
 ```
-POST /refresh-token
+POST /api/v1/refresh-token
 
 Request:
 {
@@ -125,7 +127,7 @@ Response:
 #### Logout
 
 ```
-POST /logout
+POST /api/v1/logout
 
 Request:
 {
@@ -145,7 +147,7 @@ All todo endpoints require authentication using the Bearer token in the Authoriz
 #### Get Todo Items
 
 ```
-GET /todos?page=1&limit=10&title=search&sortBy=created_at&sortOrder=desc
+GET /api/v1/todos?page=1&limit=10&title=search&sortBy=created_at&sortOrder=desc
 
 Response:
 {
@@ -165,7 +167,7 @@ Response:
 #### Create Todo Item
 
 ```
-POST /todos
+POST /api/v1/todos
 
 Request:
 {
@@ -184,7 +186,7 @@ Response:
 #### Update Todo Item
 
 ```
-PUT /todos/:id
+PUT /api/v1/todos/:id
 
 Request:
 {
@@ -203,7 +205,7 @@ Response:
 #### Delete Todo Item
 
 ```
-DELETE /todos/:id
+DELETE /api/v1/todos/:id
 
 Response: 204 No Content
 ```
@@ -251,4 +253,3 @@ Ahmed Hesham
 - [mysql2](https://www.npmjs.com/package/mysql2)
 - [express-validator](https://www.npmjs.com/package/express-validator)
 - https://roadmap.sh/projects/todo-list-api
-```
