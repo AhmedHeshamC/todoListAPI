@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getTodos, createTodo, updateTodo, deleteTodo } = require('../controllers/todo.controller');
+const { getTodos, createTodo, updateTodo, deleteTodo, batchCreateTodos } = require('../controllers/todo.controller');
 const { protect } = require('../middleware/auth.middleware');
 
 // Protect all routes
@@ -10,6 +10,9 @@ router.use(protect);
 router.route('/')
   .get(getTodos)
   .post(createTodo);
+
+router.route('/batch')
+  .post(batchCreateTodos);
 
 router.route('/:id')
   .put(updateTodo)

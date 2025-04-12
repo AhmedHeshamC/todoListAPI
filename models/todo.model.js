@@ -28,6 +28,42 @@ class Todo {
     }
   }
   
+  // Batch create todos
+  static async batchCreate(todosData) {
+    try {
+      const createdTodos = [];
+      
+      // Use a transaction to ensure all todos are created or none
+      const connection = await pool.getConnection();
+      await connection.beginTransaction();
+      
+      try {
+        for (const todoData of todosData) {
+          const { title, description, userId } = todoData;
+          
+          const [result] = await connection.query(
+            'INSERT INTO todos (title, description, user_id) VALUES (?, ?, ?)',
+            [title, description, userId]
+          );
+          
+          const [rows] = await connection.query('SELECT * FROM todos WHERE id = ?', [result.insertId]);
+          createdTodos.push(rows[0]);
+        }
+        
+        await connection.commit();
+        connection.release();
+        
+        return createdTodos;
+      } catch (error) {
+        await connection.rollback();
+        connection.release();
+        throw error;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
   // Update todo
   static async update(id, todoData) {
     try {

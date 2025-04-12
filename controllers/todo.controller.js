@@ -7,6 +7,11 @@ const todoSchema = Joi.object({
   description: Joi.string().allow('')
 });
 
+// Batch todos validation schema
+const batchTodoSchema = Joi.object({
+  todos: Joi.array().items(todoSchema).min(1).required()
+});
+
 // Get all todos
 exports.getTodos = async (req, res, next) => {
   try {
@@ -77,6 +82,42 @@ exports.createTodo = async (req, res, next) => {
       id: todo.id,
       title: todo.title,
       description: todo.description
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Batch create todos
+exports.batchCreateTodos = async (req, res, next) => {
+  try {
+    // Validate request data
+    const { error } = batchTodoSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const { todos } = req.body;
+
+    // Add user ID to each todo
+    const todosWithUserId = todos.map(todo => ({
+      ...todo,
+      userId: req.user.id
+    }));
+
+    // Batch create todos
+    const createdTodos = await Todo.batchCreate(todosWithUserId);
+
+    // Format response
+    const formattedTodos = createdTodos.map(todo => ({
+      id: todo.id,
+      title: todo.title,
+      description: todo.description
+    }));
+
+    res.status(201).json({
+      message: 'Todos created successfully',
+      data: formattedTodos
     });
   } catch (error) {
     next(error);
