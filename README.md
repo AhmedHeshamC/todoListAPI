@@ -231,25 +231,18 @@ Response: 204 No Content
 
 - Unit tests for authentication and todo endpoints using Jest and Supertest
 
-## License
-
-MIT
-
-## Author
-Ahmed Hesham
-
-## Acknowledgments
-- [Express.js](https://expressjs.com/)
-- [MySQL](https://www.mysql.com/)
-- [JWT](https://jwt.io/)
-- [Joi](https://joi.dev/)
-- [bcrypt](https://www.npmjs.com/package/bcrypt)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
-- [helmet](https://www.npmjs.com/package/helmet)
-- [cors](https://www.npmjs.com/package/cors)
-- [Jest](https://jestjs.io/)
-- [Supertest](https://www.npmjs.com/package/supertest)
-- [mysql2](https://www.npmjs.com/package/mysql2)
-- [express-validator](https://www.npmjs.com/package/express-validator)
+## Project URL
 - https://roadmap.sh/projects/todo-list-api
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create feature branch
+3. Write tests
+4. Submit a PR
+
+Please adhere to the existing code style and coverage requirements.
+
+---
+
+© 2025 Ahmed Hesham. MIT License.
